@@ -1,0 +1,46 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.4-SNAPSHOT'
+	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+	id 'java'
+}
+
+group = 'com.thinkbigthings'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/milestone' }
+	maven { url 'https://repo.spring.io/snapshot' }
+}
+
+ext {
+	set('testcontainersVersion', "1.17.3")
+}
+
+dependencies {
+//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//	runtimeOnly 'org.postgresql:postgresql'
+//	testImplementation 'org.testcontainers:postgresql'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
+
+//	implementation 'org.hibernate.validator:hibernate-validator:6.0.10.Final'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:junit-jupiter'
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
