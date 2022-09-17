@@ -9,14 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 public class Application {
 
-	// TODO check in to github
 
-	// TODO do builders for test data
-	// TODO records as response bodies - do builders here and
-
-	// TODO finish records as config objects and demo
-	// https://stackoverflow.com/questions/70683554/nested-spring-configuration-configurationproperties-in-records
-	// https://youribonnaffe.github.io/java/records/spring/2021/01/10/records-spring-boot.html
+	// TODO do builders for test data, and for records as response bodies
 
 	// TODO add pw validation inside canonical constructor
 	// (demo of compact constructor, mention it's called while unmarshalling, applies to test objects/etc)
