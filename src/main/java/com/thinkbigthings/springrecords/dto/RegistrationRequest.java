@@ -2,9 +2,20 @@ package com.thinkbigthings.springrecords.dto;
 
 import javax.validation.constraints.Size;
 
-//@NotNull
-//@Size(min = 3, message = "must be at least three characters")
 public record RegistrationRequest(@Size(min=5) String username,
                                   @Size(min=5) String plainTextPassword,
-                                  String email) { }
+                                  String email)
+{
+    public RegistrationRequest withUsername(String newName) {
+        return new RegistrationRequest(newName, plainTextPassword, email);
+    }
+
+    public RegistrationRequest withPassword(String newPassword) {
+        return new RegistrationRequest(username, newPassword, email);
+    }
+
+    public RegistrationRequest withEmail(String newEmail) {
+        return new RegistrationRequest(username, plainTextPassword, newEmail);
+    }
+}
 

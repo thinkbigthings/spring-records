@@ -1,20 +1,20 @@
 package com.thinkbigthings.springrecords;
 
 import com.thinkbigthings.springrecords.dto.RegistrationRequest;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 class UserControllerUnitTest {
 
 	private Validator validator;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();

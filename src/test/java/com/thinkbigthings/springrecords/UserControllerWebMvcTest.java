@@ -8,7 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
@@ -27,8 +33,20 @@ public class UserControllerWebMvcTest {
 	@Autowired
 	private MockMvc mockMvc;
 
+	// A record cannot be a @MockBean because records are always final
+//	@TestConfiguration
+//	static class TestConfig {
+//
+//		// this will be injected into the Test class, since it's constructor bound it can't be a @Bean
+//		ConfigurationRecord configurationRecord() {
+//			return new ConfigurationRecord(1, new ConfigurationRecord.UserField("a", 2), new ConfigurationRecord.UserPage(20));
+//		}
+//	}
+
 //	@MockBean
-//	private UserService service;
+//	private UserService;
+
+
 
 	@Test
 	public void testControllerAcceptsRegistration() throws Exception {
