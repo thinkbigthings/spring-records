@@ -14,9 +14,9 @@ public class UserController {
 
 
     // if there's only one constructor, can omit Autowired and Inject
-//    public UserController(ConfigurationRecord env) {
-//        System.out.println(env.number());
-//    }
+    public UserController(ConfigurationRecord env) {
+        System.out.println(env.number());
+    }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody String createUserRegistration(@Valid @RequestBody RegistrationRequest newUser) {

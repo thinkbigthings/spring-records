@@ -31,6 +31,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
 
+	// for mocking final classes (records)
+	testImplementation 'org.mockito:mockito-inline'
+
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
 }

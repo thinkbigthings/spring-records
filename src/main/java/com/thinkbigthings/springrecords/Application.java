@@ -10,13 +10,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 public class Application {
 
 
-	// TODO use config record as service arg in spring test
-
-	// TODO use config record as controller arg in mvc test
-
 	// TODO use cases for demo
 	// build multiple registrations to unit test validation?
-
 
 	// TODO do builders for test data, and for records as response bodies
 

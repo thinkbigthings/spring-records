@@ -46,7 +46,8 @@ public class UserControllerWebMvcTest {
 //	@MockBean
 //	private UserService;
 
-
+	@MockBean
+	ConfigurationRecord config;
 
 	@Test
 	public void testControllerAcceptsRegistration() throws Exception {
