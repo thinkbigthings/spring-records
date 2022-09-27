@@ -25,12 +25,6 @@ class UserControllerSpringBootTest {
 		registrationUrl = "http://localhost:" + port + "/registration";
 	}
 
-	// requires hibernate validator on classpath and @Valid on controller parameter
-	// (@Validated on class allows for validation of path variables)
-
-	// NOTE WebMvcTest does not apply validation to the controller parameters
-	// testing that @Valid was put on your arguments needs to happen in a test that starts the server
-
 	@Autowired
 	private TestRestTemplate restTemplate;
 

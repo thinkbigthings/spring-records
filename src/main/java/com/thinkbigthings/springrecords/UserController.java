@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 public class UserController {
@@ -19,10 +20,32 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String createUserRegistration(@Valid @RequestBody RegistrationRequest newUser) {
+    public void createUserRegistration(@Valid @RequestBody RegistrationRequest newUser) {
 
-        return "got it!";
 //        userService.saveNewUser(newUser);
     }
 
+/*
+
+    @RequestMapping(value="/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Page<UserSummary> getUsers(@PageableDefault(page = 0, size = 10, sort = {"registrationTime"}, direction=Sort.Direction.DESC) Pageable page) {
+
+        return userService.getUserSummaries(page);
+    }
+
+    @RequestMapping(value="/user/{username}/personalInfo", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public User updateUser(@RequestBody PersonalInfo userData, @PathVariable String username) {
+
+        return userService.updateUser(username, userData);
+    }
+
+    @RequestMapping(value="/user/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public User getUser(@PathVariable String username) {
+
+        return userService.getUser(username);
+    }
+    */
 }

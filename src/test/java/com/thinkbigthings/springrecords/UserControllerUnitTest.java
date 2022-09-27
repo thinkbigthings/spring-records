@@ -9,13 +9,10 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class UserControllerUnitTest {
 
 	private Validator validator;
-
-	private ConfigurationRecord confi = mock(ConfigurationRecord.class);
 
 	@BeforeEach
 	public void setup() {
