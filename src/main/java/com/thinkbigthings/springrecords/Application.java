@@ -9,16 +9,26 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 public class Application {
 
-	// TODO records as repository response (already mapped) Can we nest records in query?
-	// will need postgres and flyway
-	// write integration tests
+	// TODO show records as repository response can be returned as already mapped, test nested records
+
+	// TODO cleanup
+	// change com.thinkbigthings to org
+	// put github url in presentation
+	// review all tests
+	// add to presentation: UserDetails could be a spring record, but Spring provides a rich implementation already
+	// Spring Boot 3 requires Java 17
+	// mention the other use cases, don't need all demos or slides for the other topics
+	// update README
+
 
 	// TODO do builders for test data, and for records as response bodies
 	// show formatting for nested constructors
-	// show withers
+	// show withers and delegating constructors for default values
 	// try out the libraries?
 
 	// TODO pin library versions, try Spring Boot 3
+
+	// TODO try with spring data JDBC?
 
 	// TODO add pw validation inside canonical constructor
 	// (demo of compact constructor, mention it's called while unmarshalling, applies to test objects/etc)

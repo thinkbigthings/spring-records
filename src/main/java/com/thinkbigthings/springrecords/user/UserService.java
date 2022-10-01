@@ -1,48 +1,51 @@
-package com.thinkbigthings.springrecords;
+package com.thinkbigthings.springrecords.user;
 
+import com.thinkbigthings.springrecords.dto.AddressRecord;
+import com.thinkbigthings.springrecords.dto.PersonalInfo;
+import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.UserSummary;
+import com.thinkbigthings.springrecords.entity.Address;
+import com.thinkbigthings.springrecords.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.ConstraintViolationException;
+import java.net.URLEncoder;
+import java.time.Instant;
+import java.util.List;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.stream.Collectors.joining;
 
 @Service
 public class UserService {
 
     private static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-/*
     private UserMapper toUserRecord = new UserMapper();
 
     private UserRepository userRepo;
-    private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repo) {
         this.userRepo = repo;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public void updatePassword(String username, String newPassword) {
-
-        var user = userRepo.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
-
-        user.setPassword(passwordEncoder.encode(newPassword));
-
-        userRepo.save(user);
-    }
-
-    @Transactional
-    public org.thinkbigthings.zdd.dto.User updateUser(String username, PersonalInfo userData) {
+    public com.thinkbigthings.springrecords.dto.User updateUser(String username, PersonalInfo userData) {
 
         var user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
 
         user.setEmail(userData.email());
         user.setDisplayName(userData.displayName());
-        user.setPhoneNumber(userData.phoneNumber());
-        user.setHeightCm(userData.heightCm());
 
         List<Address> newAddressEntities = userData.addresses().stream()
                 .map(this::fromRecord)
@@ -74,7 +77,7 @@ public class UserService {
                 throw new IllegalArgumentException("Username already exists " + registration.username());
             }
 
-            userRepo.persist(fromRegistration(registration));
+            userRepo.save(fromRegistration(registration));
         }
         catch(ConstraintViolationException e) {
             String constraintMessage = "User can't be saved: " + e.getMessage();
@@ -97,7 +100,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public org.thinkbigthings.zdd.dto.User getUser(String username) {
+    public com.thinkbigthings.springrecords.dto.User getUser(String username) {
 
         return userRepo.findByUsername(username)
                 .map(toUserRecord)
@@ -112,11 +115,6 @@ public class UserService {
         user.setEmail(registration.email());
         user.setRegistrationTime(Instant.now());
         user.setEnabled(true);
-        user.setPassword(passwordEncoder.encode(registration.plainTextPassword()));
-        user.getRoles().add(Role.USER);
-
-        user.setSearchConfig(new SearchConfig());
-        user.getSearchConfig().setUser(user);
 
         return user;
     }
@@ -132,5 +130,5 @@ public class UserService {
 
         return address;
     }
-*/
+
 }

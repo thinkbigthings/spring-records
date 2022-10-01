@@ -3,7 +3,10 @@ package com.thinkbigthings.springrecords;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.thinkbigthings.springrecords.config.ConfigurationRecord;
 import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.user.UserController;
+import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,6 +34,9 @@ public class UserControllerWebMvcTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@MockBean
+	private UserService userService;
 
 	// Records are always final, so a record cannot be a @MockBean
 	// unless you use the Mockito extension that allows mocking final classes

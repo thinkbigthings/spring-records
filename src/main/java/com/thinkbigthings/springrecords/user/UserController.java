@@ -1,35 +1,42 @@
-package com.thinkbigthings.springrecords;
+package com.thinkbigthings.springrecords.user;
 
+import com.thinkbigthings.springrecords.config.ConfigurationRecord;
+import com.thinkbigthings.springrecords.dto.PersonalInfo;
 import com.thinkbigthings.springrecords.dto.RegistrationRequest;
-import org.springframework.core.env.Environment;
+import com.thinkbigthings.springrecords.dto.User;
+import com.thinkbigthings.springrecords.dto.UserSummary;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 public class UserController {
 
-//    private final UserService userService;
-
+    private UserService userService;
+    private ConfigurationRecord config;
 
     // if there's only one constructor, can omit Autowired and Inject
-    public UserController(ConfigurationRecord env) {
-        System.out.println(env.number());
+    @Autowired
+    public UserController(UserService service, ConfigurationRecord env) {
+        userService = service;
+        config = env;
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public void createUserRegistration(@Valid @RequestBody RegistrationRequest newUser) {
 
-//        userService.saveNewUser(newUser);
+        userService.saveNewUser(newUser);
     }
-
-/*
 
     @RequestMapping(value="/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Page<UserSummary> getUsers(@PageableDefault(page = 0, size = 10, sort = {"registrationTime"}, direction=Sort.Direction.DESC) Pageable page) {
+    public Page<UserSummary> getUsers(@PageableDefault(page = 0, size = 10, sort = {"registrationTime"}, direction= Sort.Direction.DESC) Pageable page) {
 
         return userService.getUserSummaries(page);
     }
@@ -47,5 +54,5 @@ public class UserController {
 
         return userService.getUser(username);
     }
-    */
+
 }

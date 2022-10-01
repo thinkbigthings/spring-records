@@ -1,4 +1,4 @@
-package com.thinkbigthings.springrecords;
+package com.thinkbigthings.springrecords.config;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.boot.context.properties.ConfigurationProperties;

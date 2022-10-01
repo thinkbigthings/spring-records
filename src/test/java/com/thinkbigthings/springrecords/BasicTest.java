@@ -35,6 +35,19 @@ public class BasicTest {
     @Test
     public void testValidatingConstructor() {
 
+
+        record Point3D(int x, int y, int z) {
+            Point3D() {
+                this(0,0,0);
+            }
+            public Point3D withX(int newX) {
+                return new Point3D(newX, y, z);
+            }
+        }
+        var point = new Point3D();
+        point = point.withX(5);
+        System.out.println(point);
+
         record PositiveInt(int value) {
             PositiveInt {
                 // compact constructor is intended for validation

@@ -1,41 +1,104 @@
 package com.thinkbigthings.springrecords;
 
 import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.User;
+import com.thinkbigthings.springrecords.user.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.RequestEntity;
 
+import java.net.URI;
+
+import static com.thinkbigthings.springrecords.data.TestData.createRandomUserRegistration;
+import static com.thinkbigthings.springrecords.data.TestData.randomPersonalInfo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerSpringBootTest {
+class UserControllerSpringBootTest extends IntegrationTest {
 
-//	@Autowired
-//	private UserController controller;
+    private static String testUserName;
+    private static URI testUserUrl;
 
-	private static String registrationUrl;
+    private static String baseUrl;
+    private static URI users;
 
-	@BeforeAll
-	public static void createReadOnlyTestData(@LocalServerPort int port) {
+    private static String registrationUrl;
 
-		registrationUrl = "http://localhost:" + port + "/registration";
-	}
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private TestRestTemplate restTemplate;
+    @BeforeAll
+    public static void createReadOnlyTestData(@LocalServerPort int randomServerPort) {
 
-	@Test
-	public void controllerArgsHaveValidAnnotation() {
+        baseUrl = "http://localhost:" + randomServerPort + "/";
+        users = URI.create(baseUrl + "user");
 
-		RegistrationRequest invalidRegistration = new RegistrationRequest("", "", "");
+        registrationUrl = baseUrl + "registration";
 
-		var response = restTemplate.postForEntity(registrationUrl, invalidRegistration, String.class);
+        RegistrationRequest testUserRegistration = createRandomUserRegistration();
 
-		assertTrue(response.getStatusCode().is4xxClientError());
-	}
+
+        testUserName = testUserRegistration.username();
+        testUserUrl = URI.create(users + "/" + testUserName);
+    }
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    public void controllerArgsPass() {
+
+        RegistrationRequest registration = new RegistrationRequest("12345", "12345", "12345");
+
+        var response = restTemplate.postForEntity(registrationUrl, registration, String.class);
+
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+    }
+
+    @Test
+    public void controllerArgsHaveValidAnnotation() {
+
+        RegistrationRequest invalidRegistration = new RegistrationRequest("", "", "");
+
+        var response = restTemplate.postForEntity(registrationUrl, invalidRegistration, String.class);
+
+        assertTrue(response.getStatusCode().is4xxClientError());
+    }
+
+
+    @Test
+    public void updateUserInfo() {
+
+        RegistrationRequest registration = createRandomUserRegistration();
+        var response = restTemplate.postForEntity(registrationUrl, registration, String.class);
+        assertTrue(response.getStatusCode().is2xxSuccessful());
+
+        var userUrl = URI.create(users + "/" + registration.username());
+        var userInfoUrl = URI.create(userUrl + "/personalInfo");
+        var updatedInfo = randomPersonalInfo();
+        var updateReq = RequestEntity.put(userInfoUrl).body(updatedInfo);
+        var savedInfo = restTemplate.exchange(updateReq, User.class).getBody().personalInfo();
+        assertEquals(updatedInfo, savedInfo);
+
+        var savedUser = restTemplate.getForEntity(userUrl, User.class);
+        assertEquals(savedUser.getBody().username(), registration.username());
+    }
+
+    @Test
+    public void testListUsers() {
+
+//        long numberUsers = userRepository.count();
+//        Page<User> userPage = userRepository.findAll(PageRequest.of(0, 10));
+//
+//        assertEquals(10, userPage.getNumberOfElements());
+//        assertTrue(userPage.getTotalElements() > 10);
+//        assertTrue(numberUsers > 10);
+    }
 
 }

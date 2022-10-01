@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.4-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+	id 'org.flywaydb.flyway' version '8.5.1'
 	id 'java'
 }
 
@@ -18,19 +19,36 @@ ext {
 	set('testcontainersVersion', "1.17.3")
 }
 
+// use preview features
+tasks.withType(JavaCompile) {
+	options.compilerArgs += "--enable-preview"
+	// options.compilerArgs += "-Xlint:preview"
+	options.compilerArgs += "-Xlint:unchecked"
+	options.compilerArgs += "-Xlint:deprecation"
+}
+tasks.withType(Test) {
+	jvmArgs += "--enable-preview"
+	environment "TESTCONTAINERS_REUSE_ENABLE", "true"
+}
+tasks.withType(JavaExec) {
+	jvmArgs += '--enable-preview'
+}
+
 dependencies {
 
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	runtimeOnly 'org.postgresql:postgresql'
-//	testImplementation 'org.testcontainers:postgresql'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'org.testcontainers:postgresql'
 
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
 
+	implementation 'org.flywaydb:flyway-core:8.5.1'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
+	testImplementation 'net.datafaker:datafaker:1.6.0'
 
 	// for mocking final classes (records)
 	testImplementation 'org.mockito:mockito-inline'
