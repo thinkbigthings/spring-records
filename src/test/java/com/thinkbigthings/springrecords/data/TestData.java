@@ -24,7 +24,7 @@ public class TestData {
         return new PersonalInfo(
                 faker.internet().emailAddress(),
                 faker.name().name(),
-                Set.of(randomAddressRecord()));
+                Set.of(randomAddressRecord(), randomAddressRecord()));
     }
 
     public static RegistrationRequest createRandomUserRegistration() {

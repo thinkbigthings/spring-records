@@ -52,7 +52,8 @@ public class UserController {
     @ResponseBody
     public User getUser(@PathVariable String username) {
 
-        return userService.getUser(username);
+        User foundUser = userService.getUser(username);
+        return foundUser;
     }
 
 }

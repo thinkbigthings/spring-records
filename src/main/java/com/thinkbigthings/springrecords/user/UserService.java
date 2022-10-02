@@ -33,9 +33,11 @@ public class UserService {
     private UserMapper toUserRecord = new UserMapper();
 
     private UserRepository userRepo;
+    private UserDao userDao;
 
-    public UserService(UserRepository repo) {
+    public UserService(UserRepository repo, UserDao dao) {
         this.userRepo = repo;
+        this.userDao = dao;
     }
 
     @Transactional
@@ -102,9 +104,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public com.thinkbigthings.springrecords.dto.User getUser(String username) {
 
-        return userRepo.findByUsername(username)
-                .map(toUserRecord)
-                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
+        return userDao.getUserDto(username);
+//        return userRepo.findByUsername(username)
+//                .map(toUserRecord)
+//                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
     }
 
     public User fromRegistration(RegistrationRequest registration) {
