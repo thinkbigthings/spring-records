@@ -2,22 +2,21 @@ package com.thinkbigthings.springrecords;
 
 import com.thinkbigthings.springrecords.dto.RegistrationRequest;
 import com.thinkbigthings.springrecords.dto.User;
-import com.thinkbigthings.springrecords.user.UserRepository;
+import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.RequestEntity;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityNotFoundException;
 import java.net.URI;
 
 import static com.thinkbigthings.springrecords.data.TestData.createRandomUserRegistration;
 import static com.thinkbigthings.springrecords.data.TestData.randomPersonalInfo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class UserControllerSpringBootTest extends IntegrationTest {
@@ -31,7 +30,7 @@ class UserControllerSpringBootTest extends IntegrationTest {
     private static String registrationUrl;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @BeforeAll
     public static void createReadOnlyTestData(@LocalServerPort int randomServerPort) {
@@ -88,6 +87,11 @@ class UserControllerSpringBootTest extends IntegrationTest {
 
         var savedUser = restTemplate.getForEntity(userUrl, User.class);
         assertEquals(savedUser.getBody().username(), registration.username());
+    }
+
+    @Test
+    public void noSuchUser() {
+        assertThrows(EntityNotFoundException.class, () -> userService.getUser("noSuchUser"));
     }
 
     @Test

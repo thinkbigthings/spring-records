@@ -4,6 +4,7 @@ import com.thinkbigthings.springrecords.dto.AddressRecord;
 import com.thinkbigthings.springrecords.dto.PersonalInfo;
 import com.thinkbigthings.springrecords.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class UserDao {
@@ -44,16 +46,23 @@ public class UserDao {
         }
     };
 
-    public User getUserDto(String username) {
+    public Optional<User> getUserDto(String username) {
 
-        String userSql = "SELECT * FROM app_user u WHERE u.username=?";
-        IntermediateUserRecord user = jdbcTemplate.queryForObject(userSql, userRowMapper, username);
+        try {
 
-        String addressSql = "SELECT * from address a WHERE a.user_id=?";
-        List<AddressRecord> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
+            // If there is no result, this throws a EmptyResultDataAccessException
+            String userSql = "SELECT * FROM app_user u WHERE u.username=?";
+            IntermediateUserRecord user = jdbcTemplate.queryForObject(userSql, userRowMapper, username);
 
-        return new User(user.username(), user.registrationTime().toString(),
-                        new PersonalInfo(user.email(), user.display(), new HashSet<>(addresses)));
+            String addressSql = "SELECT * from address a WHERE a.user_id=?";
+            List<AddressRecord> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
+
+            return Optional.of(new User(user.username(), user.registrationTime().toString(),
+                    new PersonalInfo(user.email(), user.display(), new HashSet<>(addresses))));
+        }
+        catch(EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
 }

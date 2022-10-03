@@ -104,7 +104,9 @@ public class UserService {
     @Transactional(readOnly = true)
     public com.thinkbigthings.springrecords.dto.User getUser(String username) {
 
-        return userDao.getUserDto(username);
+        return userDao.getUserDto(username)
+                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
+
 //        return userRepo.findByUsername(username)
 //                .map(toUserRecord)
 //                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
