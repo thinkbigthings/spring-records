@@ -23,9 +23,9 @@ public class UserDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    record IntermediateUserRecord(Long id, String username, Instant registrationTime, String email, String display) {}
+    private record IntermediateUserRecord(Long id, String username, Instant registrationTime, String email, String display) {}
 
-    RowMapper<AddressRecord> addressRowMapper = new RowMapper<>() {
+    private RowMapper<AddressRecord> addressRowMapper = new RowMapper<>() {
         @Override public AddressRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
             String street = rs.getString(3);
             String city = rs.getString(4);
@@ -35,7 +35,7 @@ public class UserDao {
         }
     };
 
-    RowMapper<IntermediateUserRecord> userRowMapper = new RowMapper<>() {
+    private RowMapper<IntermediateUserRecord> userRowMapper = new RowMapper<>() {
         @Override public IntermediateUserRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
             Long id = rs.getLong(1);
             String name = rs.getString(2);
@@ -49,8 +49,6 @@ public class UserDao {
     public Optional<User> getUserDto(String username) {
 
         try {
-
-            // If there is no result, this throws a EmptyResultDataAccessException
             String userSql = "SELECT * FROM app_user u WHERE u.username=?";
             IntermediateUserRecord user = jdbcTemplate.queryForObject(userSql, userRowMapper, username);
 

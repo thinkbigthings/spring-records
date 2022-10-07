@@ -66,7 +66,7 @@ public class UserService {
     }
 
     @Transactional
-    public void saveNewUser(RegistrationRequest registration) {
+    public com.thinkbigthings.springrecords.dto.User saveNewUser(RegistrationRequest registration) {
 
         String username = registration.username();
 
@@ -79,7 +79,7 @@ public class UserService {
                 throw new IllegalArgumentException("Username already exists " + registration.username());
             }
 
-            userRepo.save(fromRegistration(registration));
+            return toUserRecord.apply(userRepo.save(fromRegistration(registration)));
         }
         catch(ConstraintViolationException e) {
             String constraintMessage = "User can't be saved: " + e.getMessage();
@@ -104,12 +104,17 @@ public class UserService {
     @Transactional(readOnly = true)
     public com.thinkbigthings.springrecords.dto.User getUser(String username) {
 
-        return userDao.getUserDto(username)
-                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
+        // toUserRecord mapper is good for returning when an entity state transition was necessary
+        // but for read only can return dto directly
 
-//        return userRepo.findByUsername(username)
-//                .map(toUserRecord)
+        // both of these work
+
+//        return userDao.getUserDto(username)
 //                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
+
+        return userRepo.findByUsername(username)
+                .map(toUserRecord)
+                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
     }
 
     public User fromRegistration(RegistrationRequest registration) {

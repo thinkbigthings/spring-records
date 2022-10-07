@@ -9,29 +9,21 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 public class Application {
 
-	// TODO show records as repository response can be returned as already mapped
-	// clean up toUserRecord mapper from old code, maybe keep for demo as alternative
-	// show test for DTO return values end to end
-	// try config with https://docs.spring.io/spring-data/jdbc/docs/3.0.0-M6/reference/html/#jdbc.query-methods.at-query.custom-rowmapper
+	// TODO try new mapper config, can we put it on a Repository?
+	// https://docs.spring.io/spring-data/jdbc/docs/3.0.0-M6/reference/html/#jdbc.query-methods.at-query.custom-rowmapper
 
-	// TODO cleanup
-	// change com.thinkbigthings to org
+	// TODO cleanup code
+	// change com.thinkbigthings to org or io.springone22
+	// review all tests: BasicTest, DtoTest, and methods in the User tests
+	// pin library versions, try Spring Boot 3
+
+	// TODO cleanup presentation
+	// UserDetails could be a spring record, but Spring provides a rich implementation already
 	// put github url in presentation
-	// review all tests
-	// add to presentation: UserDetails could be a spring record, but Spring provides a rich implementation already
 	// Spring Boot 3 requires Java 17
 	// mention the other use cases, don't need all demos or slides for the other topics
 	// update README
 
-
-	// TODO do builders for test data, and for records as response bodies
-	// show formatting for nested constructors
-	// show withers and delegating constructors for default values
-	// try out the libraries?
-
-	// TODO pin library versions, try Spring Boot 3
-
-	// TODO try with spring data JDBC?
 
 	// TODO add pw validation inside canonical constructor
 	// (demo of compact constructor, mention it's called while unmarshalling, applies to test objects/etc)

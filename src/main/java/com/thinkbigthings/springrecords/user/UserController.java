@@ -29,9 +29,9 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createUserRegistration(@Valid @RequestBody RegistrationRequest newUser) {
+    public User createUser(@Valid @RequestBody RegistrationRequest newUser) {
 
-        userService.saveNewUser(newUser);
+       return  userService.saveNewUser(newUser);
     }
 
     @RequestMapping(value="/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

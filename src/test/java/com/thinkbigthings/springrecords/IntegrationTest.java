@@ -33,9 +33,6 @@ public class IntegrationTest {
 
     protected static PostgreSQLContainer<?> postgres;
 
-//    @Autowired
-//            private Flyway f;
-
     @LocalServerPort
     protected int randomServerPort;
 

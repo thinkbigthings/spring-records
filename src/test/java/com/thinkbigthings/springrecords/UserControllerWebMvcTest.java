@@ -20,11 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // WebMvcTest (as opposed to pure unit test) is good for testing:
-//  HTTP request mapping
-//  Deserialization
-//  Input field validation
-//  Serialization
-//  Error handling
+// almost of the full stack is used, and your code will be called in exactly the same way as if
+// it were processing a real HTTP request but without the cost of starting the server
+//   HTTP request mapping
+//   Input field validation
+//   Serialization / Deserialization
+//   Error handling
 
 @WebMvcTest(UserController.class)
 public class UserControllerWebMvcTest {
@@ -32,6 +33,7 @@ public class UserControllerWebMvcTest {
 	private ObjectMapper mapper = new ObjectMapper();
 	private ObjectWriter jsonWriter = mapper.writerFor(RegistrationRequest.class);
 
+	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -51,10 +53,10 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationFailsValidation() throws Exception {
 
-		registration = registration.withUsername("1");
+		var badRegistration = new RegistrationRequest("1", "1", "x@123.com");
 
 		var reqBuilder = post("/registration")
-				.content(jsonWriter.writeValueAsString(registration))
+				.content(jsonWriter.writeValueAsString(badRegistration))
 				.contentType(MediaType.APPLICATION_JSON);
 
 		mockMvc.perform(reqBuilder)
@@ -64,7 +66,6 @@ public class UserControllerWebMvcTest {
 
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
-
 
 		var reqBuilder = post("/registration")
 				.content(jsonWriter.writeValueAsString(registration))
