@@ -1,5 +1,6 @@
 package com.thinkbigthings.springrecords;
 
+import com.thinkbigthings.springrecords.config.IntegrationTest;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserDao;
 import com.thinkbigthings.springrecords.user.UserRepository;
@@ -8,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
-import javax.persistence.EntityNotFoundException;
 
 import static com.thinkbigthings.springrecords.data.TestData.createRandomUserRegistration;
 import static com.thinkbigthings.springrecords.data.TestData.randomPersonalInfo;
@@ -30,19 +29,6 @@ class UserControllerSpringBootTest extends IntegrationTest {
     @Autowired
     private UserService userService;
 
-
-    @Test
-    public void testUserRecord() {
-
-        var newUser = userController.createUser(createRandomUserRegistration());
-
-        var userResponse = userController.updateUser(randomPersonalInfo(), newUser.username());
-
-        var updatedUser = userController.getUser(newUser.username());
-
-        assertEquals(userResponse, updatedUser);
-    }
-
     @Test
     public void testUserSummary() {
 
@@ -57,6 +43,18 @@ class UserControllerSpringBootTest extends IntegrationTest {
     }
 
     @Test
+    public void testUserRecord() {
+
+        var newUser = userController.createUser(createRandomUserRegistration());
+
+        var userResponse = userController.updateUser(randomPersonalInfo(), newUser.username());
+
+        var updatedUser = userController.getUser(newUser.username());
+
+        assertEquals(userResponse, updatedUser);
+    }
+
+    @Test
     public void testRepoVsDao() {
 
         var user = userController.createUser(createRandomUserRegistration());
@@ -66,11 +64,6 @@ class UserControllerSpringBootTest extends IntegrationTest {
         var repoUser = userRepository.findRecord(user.username());
 
         assertEquals(daoUser, repoUser);
-    }
-
-    @Test
-    public void noSuchUser() {
-        assertThrows(EntityNotFoundException.class, () -> userService.getUser("noSuchUser"));
     }
 
 }

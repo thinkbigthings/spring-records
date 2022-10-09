@@ -45,7 +45,6 @@ public class UserControllerWebMvcTest {
 	@MockBean
 	ConfigurationRecord config;
 
-	private RegistrationRequest registration = new RegistrationRequest("12345", "12345", "x@123.com");
 
 	// requires hibernate validator on classpath and @Valid on controller parameter
 	// (@Validated on class allows for validation of path variables)
@@ -66,6 +65,8 @@ public class UserControllerWebMvcTest {
 
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
+
+		RegistrationRequest registration = new RegistrationRequest("12345", "12345", "x@123.com");
 
 		var reqBuilder = post("/registration")
 				.content(jsonWriter.writeValueAsString(registration))
