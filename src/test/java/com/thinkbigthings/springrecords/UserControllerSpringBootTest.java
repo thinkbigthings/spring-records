@@ -4,7 +4,6 @@ import com.thinkbigthings.springrecords.config.IntegrationTest;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserDao;
 import com.thinkbigthings.springrecords.user.UserRepository;
-import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -26,24 +25,8 @@ class UserControllerSpringBootTest extends IntegrationTest {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private UserService userService;
-
     @Test
-    public void testUserSummary() {
-
-        for(int i=0; i < 10; i++) {
-            userController.createUser(createRandomUserRegistration());
-        }
-
-        Pageable firstPage = PageRequest.of(0, 10);
-        var users = userController.getUsers(firstPage);
-
-        assertTrue(users.getTotalElements() >= 10);
-    }
-
-    @Test
-    public void testUserRecord() {
+    public void testControllerArgsAndReturns() {
 
         var newUser = userController.createUser(createRandomUserRegistration());
 
@@ -52,6 +35,21 @@ class UserControllerSpringBootTest extends IntegrationTest {
         var updatedUser = userController.getUser(newUser.username());
 
         assertEquals(userResponse, updatedUser);
+    }
+
+    @Test
+    public void testUserSummary() {
+
+        // create test users
+        for(int i=0; i < 1; i++) {
+            userController.createUser(createRandomUserRegistration());
+        }
+
+        // retrieve users
+        Pageable firstPage = PageRequest.of(0, 10);
+        var users = userController.getUsers(firstPage);
+
+        assertTrue(users.getTotalElements() >= 10);
     }
 
     @Test

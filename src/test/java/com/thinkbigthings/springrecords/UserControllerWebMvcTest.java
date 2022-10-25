@@ -40,8 +40,9 @@ public class UserControllerWebMvcTest {
 	@MockBean
 	private UserService userService;
 
-	// Records are always final, so a record cannot be a @MockBean
-	// unless you use the Mockito extension that allows mocking final classes
+	// Records are always final, so a record cannot be a @MockBean or be mocked at all
+	// unless you use the Mockito extension that allows mocking final classes (org.mockito:mockito-inline)
+	// A record can implement an interface and THAT can be mocked
 	@MockBean
 	ConfigurationRecord config;
 
@@ -58,6 +59,7 @@ public class UserControllerWebMvcTest {
 				.content(jsonWriter.writeValueAsString(badRegistration))
 				.contentType(MediaType.APPLICATION_JSON);
 
+		// this tests that the validation is applied
 		mockMvc.perform(reqBuilder)
 				.andDo(print())
 				.andExpect(status().is4xxClientError());

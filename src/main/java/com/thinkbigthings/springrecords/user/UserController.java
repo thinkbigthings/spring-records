@@ -38,7 +38,8 @@ public class UserController {
     @ResponseBody
     public Page<UserSummary> getUsers(@PageableDefault(page = 0, size = 10, sort = {"registrationTime"}, direction= Sort.Direction.DESC) Pageable page) {
 
-        return userService.getUserSummaries(page);
+        var summaries = userService.getUserSummaries(page);
+        return summaries;
     }
 
     @RequestMapping(value="/user/{username}/personalInfo", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)

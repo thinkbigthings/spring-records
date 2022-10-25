@@ -41,7 +41,7 @@ public class UserDao {
             String name = rs.getString(2);
             String email = rs.getString(3);
             String display = rs.getString(4);
-            Timestamp reg = rs.getTimestamp(6);
+            Timestamp reg = rs.getTimestamp(5);
             return new IntermediateUserRecord(id, name, reg.toInstant(), email, display);
         }
     };

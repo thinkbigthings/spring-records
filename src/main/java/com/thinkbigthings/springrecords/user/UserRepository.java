@@ -23,6 +23,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String name);
 
+    // this is a JPQL Constructor Expression
+    // nested constructors are not allowed
+    // collections in constructor ars are not allowed
     @Query("SELECT new com.thinkbigthings.springrecords.dto.UserSummary" +
             "(u.username, u.displayName) " +
             "FROM User u " +

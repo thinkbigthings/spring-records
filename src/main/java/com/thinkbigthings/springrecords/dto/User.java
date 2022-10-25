@@ -2,14 +2,15 @@ package com.thinkbigthings.springrecords.dto;
 
 import java.util.Collections;
 
+import static java.util.Collections.emptySet;
+
 // This is one possible Builder
 // Good news it's an easy one-liner per method, no separate Builder class, immutable by default, no .build() at the end
 // Bad news is it's a lot of boilerplate so could be error prone, and creates new object per builder method call
-
 public record User(String username, String registrationTime, PersonalInfo personalInfo) {
 
     public User() {
-        this("", "", new PersonalInfo("", "", Collections.emptySet()));
+        this("", "", new PersonalInfo("", "", emptySet()));
     }
 
     public User withUsername(String newName) {

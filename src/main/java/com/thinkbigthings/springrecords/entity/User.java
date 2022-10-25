@@ -1,6 +1,5 @@
 package com.thinkbigthings.springrecords.entity;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -32,9 +31,6 @@ public class User implements Serializable {
     @Size(min = 3, message = "must be at least three characters")
     @Column(name="display_name")
     private String displayName = "";
-
-    @Basic
-    private boolean enabled = false;
 
     @Basic
     @NotNull
@@ -75,14 +71,6 @@ public class User implements Serializable {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public Instant getRegistrationTime() {

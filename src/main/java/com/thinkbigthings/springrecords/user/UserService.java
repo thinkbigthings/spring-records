@@ -124,7 +124,6 @@ public class UserService {
         user.setDisplayName(registration.username());
         user.setEmail(registration.email());
         user.setRegistrationTime(Instant.now());
-        user.setEnabled(true);
 
         return user;
     }

@@ -4,9 +4,8 @@ import java.util.Collections;
 import java.util.Set;
 
 // records are shallowly immutable
-public record PersonalInfo(String email,
-                           String displayName,
-                           Set<AddressRecord> addresses) {
+// records can take other records (or classes)
+public record PersonalInfo(String email, String displayName,  Set<AddressRecord> addresses) {
 
     // we can assign to "this" in an overridden canonical constructor
     // but not in the compact constructor
