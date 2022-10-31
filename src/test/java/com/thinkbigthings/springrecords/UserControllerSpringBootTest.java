@@ -28,6 +28,7 @@ class UserControllerSpringBootTest extends IntegrationTest {
     @Test
     public void testControllerArgsAndReturns() {
 
+        // enter here!
         var newUser = userController.createUser(createRandomUserRegistration());
 
         var userResponse = userController.updateUser(randomPersonalInfo(), newUser.username());
@@ -41,15 +42,12 @@ class UserControllerSpringBootTest extends IntegrationTest {
     public void testUserSummary() {
 
         // create test users
-        for(int i=0; i < 1; i++) {
-            userController.createUser(createRandomUserRegistration());
-        }
+        userController.createUser(createRandomUserRegistration());
 
-        // retrieve users
-        Pageable firstPage = PageRequest.of(0, 10);
-        var users = userController.getUsers(firstPage);
+        // come on in!
+        var users = userController.getUsers(PageRequest.of(0, 10));
 
-        assertTrue(users.getTotalElements() >= 10);
+        assertTrue(users.getTotalElements() >= 1);
     }
 
     @Test

@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 @Validated
 @ConfigurationProperties(prefix = "app")
-public record ConfigurationRecord(int number, @NotNull UserPage page, UserField field) {
+public record ConfigurationRecord(int number, Page page, @NotNull Strategy strategy) {
 
-    public record UserPage(int size) {   }
+    public record Strategy(Boolean dao) {   }
 
-    public record UserField(String name, int depth) {  }
+    public record Page(int size) {   }
 
 }
 

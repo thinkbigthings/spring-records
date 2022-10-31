@@ -52,19 +52,19 @@ public class BasicTest {
     public void testCompactConstructor() {
 
         // compact constructor is for validation logic
-        assertThrows(IllegalArgumentException.class, () -> new AddressRecord("", "", "", ""));
+        assertThrows(IllegalArgumentException.class, () -> new UserAddress("", "", "", ""));
     }
 
     @Test
     public void testImmutability() {
 
-        var addresses = new HashSet<AddressRecord>();
+        var addresses = new HashSet<UserAddress>();
         addresses.add(TestData.randomAddressRecord());
         addresses.add(TestData.randomAddressRecord());
         addresses.add(TestData.randomAddressRecord());
 
         // records are shallowly immutable, you need to manage deep immutability yourself
-        PersonalInfo info = new PersonalInfo("myname", "me@springone.io", addresses);
+        UserEditableInfo info = new UserEditableInfo("myname", "me@springone.io", addresses);
 
         assertThrows(UnsupportedOperationException.class, () -> info.addresses().clear());
     }
@@ -85,7 +85,7 @@ public class BasicTest {
     public void testBuilder() {
 
         String now = Instant.now().toString();
-        PersonalInfo info = new PersonalInfo("egarak@ds9.gov", "Elim Garak", new HashSet<>());
+        UserEditableInfo info = new UserEditableInfo("egarak@ds9.gov", "Elim Garak", new HashSet<>());
 
         var user1 = new User()
                 .withUsername("egarak")

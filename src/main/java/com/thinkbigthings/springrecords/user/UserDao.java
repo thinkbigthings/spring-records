@@ -1,7 +1,7 @@
 package com.thinkbigthings.springrecords.user;
 
-import com.thinkbigthings.springrecords.dto.AddressRecord;
-import com.thinkbigthings.springrecords.dto.PersonalInfo;
+import com.thinkbigthings.springrecords.dto.UserAddress;
+import com.thinkbigthings.springrecords.dto.UserEditableInfo;
 import com.thinkbigthings.springrecords.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,13 +25,17 @@ public class UserDao {
 
     private record IntermediateUserRecord(Long id, String username, Instant registrationTime, String email, String display) {}
 
-    private RowMapper<AddressRecord> addressRowMapper = new RowMapper<>() {
-        @Override public AddressRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+    // records work great with RowMapper
+    // also with ResultSetExtractor, RowCallbackHandler...
+
+    private RowMapper<UserAddress> addressRowMapper = new RowMapper<>() {
+        @Override public UserAddress mapRow(ResultSet rs, int rowNum) throws SQLException {
             String street = rs.getString(3);
             String city = rs.getString(4);
             String state = rs.getString(5);
             String zip = rs.getString(6);
-            return new AddressRecord(street, city, state,zip);
+            return new UserAddress(street, city, state,zip);
         }
     };
 
@@ -53,10 +57,10 @@ public class UserDao {
             IntermediateUserRecord user = jdbcTemplate.queryForObject(userSql, userRowMapper, username);
 
             String addressSql = "SELECT * from address a WHERE a.user_id=?";
-            List<AddressRecord> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
+            List<UserAddress> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
 
             return Optional.of(new User(user.username(), user.registrationTime().toString(),
-                    new PersonalInfo(user.email(), user.display(), new HashSet<>(addresses))));
+                    new UserEditableInfo(user.email(), user.display(), new HashSet<>(addresses))));
         }
         catch(EmptyResultDataAccessException e) {
             return Optional.empty();

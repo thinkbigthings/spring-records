@@ -1,8 +1,8 @@
 package com.thinkbigthings.springrecords.user;
 
 
-import com.thinkbigthings.springrecords.dto.AddressRecord;
-import com.thinkbigthings.springrecords.dto.PersonalInfo;
+import com.thinkbigthings.springrecords.dto.UserAddress;
+import com.thinkbigthings.springrecords.dto.UserEditableInfo;
 import com.thinkbigthings.springrecords.dto.UserSummary;
 import com.thinkbigthings.springrecords.entity.User;
 import org.springframework.data.domain.Page;
@@ -18,8 +18,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    boolean existsByUsername(String name);
 
     Optional<User> findByUsername(String name);
 
@@ -44,9 +42,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<UserDbRow> loadUserData(String username);
 
 
-    @Query("SELECT new com.thinkbigthings.springrecords.dto.AddressRecord(a.line1, a.city, a.state, a.zip)" +
+    @Query("SELECT new com.thinkbigthings.springrecords.dto.UserAddress(a.line1, a.city, a.state, a.zip)" +
             "FROM Address a WHERE a.user.username=:username")
-    List<AddressRecord> loadUserAddresses(String username);
+    List<UserAddress> loadUserAddresses(String username);
 
 
     default Optional<com.thinkbigthings.springrecords.dto.User> findRecord(String username) {
@@ -62,7 +60,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return user.map(u -> new com.thinkbigthings.springrecords.dto.User()
                 .withUsername(u.username())
                 .withRegistrationTime(u.registrationTime().toString())
-                .withPersonalInfo(new PersonalInfo(u.email(), u.display(), addresses)));
+                .withPersonalInfo(new UserEditableInfo(u.email(), u.display(), addresses)));
     }
 
 
