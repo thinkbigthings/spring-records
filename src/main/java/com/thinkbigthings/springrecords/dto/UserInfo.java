@@ -5,13 +5,13 @@ import java.util.Set;
 
 // records are shallowly immutable
 // records can take other records (or classes)
-public record UserEditableInfo(String email, String displayName, Set<UserAddress> addresses) {
+public record UserInfo(String email, String displayName, Set<UserAddress> addresses) {
 
     // we can assign to "this" in an overridden canonical constructor
     // but not in the compact constructor
-    public UserEditableInfo(String email,
-                            String displayName,
-                            Set<UserAddress> addresses)
+    public UserInfo(String email,
+                    String displayName,
+                    Set<UserAddress> addresses)
     {
         this.email = email;
         this.displayName = displayName;

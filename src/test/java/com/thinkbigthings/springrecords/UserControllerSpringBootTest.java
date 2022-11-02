@@ -45,6 +45,7 @@ class UserControllerSpringBootTest extends IntegrationTest {
         userController.createUser(createRandomUserRegistration());
 
         // come on in!
+        // data comes out of the database already mapped - no extra mapping step!
         var users = userController.getUsers(PageRequest.of(0, 10));
 
         assertTrue(users.getTotalElements() >= 1);

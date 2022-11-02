@@ -64,7 +64,7 @@ public class BasicTest {
         addresses.add(TestData.randomAddressRecord());
 
         // records are shallowly immutable, you need to manage deep immutability yourself
-        UserEditableInfo info = new UserEditableInfo("myname", "me@springone.io", addresses);
+        UserInfo info = new UserInfo("myname", "me@springone.io", addresses);
 
         assertThrows(UnsupportedOperationException.class, () -> info.addresses().clear());
     }
@@ -73,7 +73,7 @@ public class BasicTest {
     public void testAnnotations() {
 
         // annotations are applied on record components
-        var invalidRequest = new RegistrationRequest("", "", "");
+        var invalidRequest = new CreateUser("", "", "");
 
         // these will be applied on
         var violations = validator.validate(invalidRequest);
@@ -85,7 +85,7 @@ public class BasicTest {
     public void testBuilder() {
 
         String now = Instant.now().toString();
-        UserEditableInfo info = new UserEditableInfo("egarak@ds9.gov", "Elim Garak", new HashSet<>());
+        UserInfo info = new UserInfo("egarak@ds9.gov", "Elim Garak", new HashSet<>());
 
         var user1 = new User()
                 .withUsername("egarak")

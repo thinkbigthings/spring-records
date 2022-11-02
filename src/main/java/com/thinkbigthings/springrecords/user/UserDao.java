@@ -1,7 +1,7 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
+import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -60,7 +60,7 @@ public class UserDao {
             List<UserAddress> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
 
             return Optional.of(new User(user.username(), user.registrationTime().toString(),
-                    new UserEditableInfo(user.email(), user.display(), new HashSet<>(addresses))));
+                    new UserInfo(user.email(), user.display(), new HashSet<>(addresses))));
         }
         catch(EmptyResultDataAccessException e) {
             return Optional.empty();

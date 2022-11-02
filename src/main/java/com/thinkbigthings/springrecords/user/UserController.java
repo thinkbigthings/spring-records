@@ -1,14 +1,15 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.config.ConfigurationRecord;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
-import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.UserInfo;
+import com.thinkbigthings.springrecords.dto.CreateUser;
 import com.thinkbigthings.springrecords.dto.User;
 import com.thinkbigthings.springrecords.dto.UserSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public User createUser(@Valid @RequestBody RegistrationRequest newUser) {
+    public User createUser(@Valid @RequestBody CreateUser newUser) {
 
         // control nullability at the boundaries and prevent NPE
 
@@ -45,13 +46,21 @@ public class UserController {
     @ResponseBody
     public Page<UserSummary> getUsers(@PageableDefault(page = 0, size = 10, sort = {"registrationTime"}, direction= Sort.Direction.DESC) Pageable page) {
 
-        var summaries = userService.getUserSummaries(page, true);
+        var boundedPage = withMaxSize(page);
+        var summaries = userService.getUserSummaries(boundedPage);
+
         return summaries;
+    }
+
+    private Pageable withMaxSize(Pageable page) {
+        return page.getPageSize() > config.page().maxSize()
+            ? PageRequest.of(page.getPageSize(), config.page().maxSize(), page.getSort())
+            : page;
     }
 
     @RequestMapping(value="/user/{username}/personalInfo", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public User updateUser(@RequestBody UserEditableInfo userData, @PathVariable String username) {
+    public User updateUser(@RequestBody UserInfo userData, @PathVariable String username) {
 
         return userService.updateUser(username, userData);
     }
@@ -60,7 +69,7 @@ public class UserController {
     @ResponseBody
     public User getUser(@PathVariable String username) {
 
-        User foundUser = userService.getUser(username);
+        User foundUser = userService.getUser(username, config.data().useRepo());
         return foundUser;
     }
 

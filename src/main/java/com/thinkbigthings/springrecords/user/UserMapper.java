@@ -1,7 +1,7 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
+import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.entity.Address;
 import com.thinkbigthings.springrecords.entity.User;
 
@@ -20,13 +20,13 @@ public class UserMapper implements Function<User, com.thinkbigthings.springrecor
                 toPersonalInfoRecord(user));
     }
 
-    public UserEditableInfo toPersonalInfoRecord(User user) {
+    public UserInfo toPersonalInfoRecord(User user) {
 
         Set<UserAddress> addresses = user.getAddresses().stream()
                 .map(this::toAddressRecord)
                 .collect(toSet());
 
-        return new UserEditableInfo(user.getEmail(),
+        return new UserInfo(user.getEmail(),
                 user.getDisplayName(),
                 addresses);
     }

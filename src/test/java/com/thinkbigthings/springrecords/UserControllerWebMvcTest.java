@@ -4,7 +4,7 @@ package com.thinkbigthings.springrecords;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkbigthings.springrecords.config.ConfigurationRecord;
-import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.CreateUser;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerWebMvcTest {
 
 	private ObjectMapper mapper = new ObjectMapper();
-	private ObjectWriter jsonWriter = mapper.writerFor(RegistrationRequest.class);
+	private ObjectWriter jsonWriter = mapper.writerFor(CreateUser.class);
 
 	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
@@ -51,9 +51,9 @@ public class UserControllerWebMvcTest {
 	// (@Validated on class allows for validation of path variables)
 
 	@Test
-	public void testRegistrationFailsValidation() throws Exception {
+	public void testRegistrationFailsSizeValidation() throws Exception {
 
-		var badRegistration = new RegistrationRequest("1", "1", "x@123.com");
+		var badRegistration = new CreateUser("1", "1", "x@123.com");
 
 		var reqBuilder = post("/registration")
 				.content(jsonWriter.writeValueAsString(badRegistration))
@@ -68,7 +68,7 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
 
-		RegistrationRequest registration = new RegistrationRequest("12345", "12345", "x@123.com");
+		CreateUser registration = new CreateUser("12345", "12345", "x@123.com");
 
 		var reqBuilder = post("/registration")
 				.content(jsonWriter.writeValueAsString(registration))

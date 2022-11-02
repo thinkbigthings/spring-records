@@ -2,8 +2,8 @@ package com.thinkbigthings.springrecords.data;
 
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
-import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.UserInfo;
+import com.thinkbigthings.springrecords.dto.CreateUser;
 import net.datafaker.Address;
 import net.datafaker.Faker;
 
@@ -19,21 +19,21 @@ public class TestData {
 
     private static Faker faker = new Faker(Locale.US, random);
 
-    public static UserEditableInfo randomPersonalInfo() {
+    public static UserInfo randomPersonalInfo() {
 
-        return new UserEditableInfo(
+        return new UserInfo(
                 faker.internet().emailAddress(),
                 faker.name().name(),
                 Set.of(randomAddressRecord(), randomAddressRecord()));
     }
 
-    public static RegistrationRequest createRandomUserRegistration() {
+    public static CreateUser createRandomUserRegistration() {
 
         String username = "user-" + randomUUID();
         String password = "password";
-        UserEditableInfo info = randomPersonalInfo();
+        UserInfo info = randomPersonalInfo();
 
-        return new RegistrationRequest(username, password, info.email());
+        return new CreateUser(username, password, info.email());
     }
 
     public static UserAddress randomAddressRecord() {

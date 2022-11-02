@@ -1,14 +1,11 @@
 package com.thinkbigthings.springrecords.user;
 
-import com.thinkbigthings.springrecords.config.ConfigurationRecord;
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
-import com.thinkbigthings.springrecords.dto.RegistrationRequest;
+import com.thinkbigthings.springrecords.dto.UserInfo;
+import com.thinkbigthings.springrecords.dto.CreateUser;
 import com.thinkbigthings.springrecords.dto.UserSummary;
 import com.thinkbigthings.springrecords.entity.Address;
 import com.thinkbigthings.springrecords.entity.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +33,7 @@ public class UserService {
     }
 
     @Transactional
-    public com.thinkbigthings.springrecords.dto.User updateUser(String username, UserEditableInfo userData) {
+    public com.thinkbigthings.springrecords.dto.User updateUser(String username, UserInfo userData) {
 
         var user = userRepo.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
@@ -61,7 +58,7 @@ public class UserService {
     }
 
     @Transactional
-    public com.thinkbigthings.springrecords.dto.User saveNewUser(RegistrationRequest registration) {
+    public com.thinkbigthings.springrecords.dto.User saveNewUser(CreateUser registration) {
 
         try {
             return toUserRecord.apply(userRepo.save(fromRegistration(registration)));
@@ -72,23 +69,25 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<UserSummary> getUserSummaries(Pageable page, boolean useRepo) {
+    public Page<UserSummary> getUserSummaries(Pageable page) {
 
         return userRepo.loadSummaries(page);
     }
 
     @Transactional(readOnly = true)
-    public com.thinkbigthings.springrecords.dto.User getUser(String username) {
+    public com.thinkbigthings.springrecords.dto.User getUser(String username, boolean useRepo) {
 
         // toUserRecord mapper is good for returning when an entity state transition was necessary
         // but for read only can return dto directly
 
-        return userRepo.findByUsername(username)
-                .map(toUserRecord)
-                .orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
+        var user = useRepo
+                ? userRepo.findRecord(username)
+                : userDao.getUserDto(username);
+
+        return user.orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
     }
 
-    public User fromRegistration(RegistrationRequest registration) {
+    public User fromRegistration(CreateUser registration) {
 
         var user = new User(registration.username(), registration.username());
 

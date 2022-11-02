@@ -2,7 +2,7 @@ package com.thinkbigthings.springrecords.user;
 
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserEditableInfo;
+import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.dto.UserSummary;
 import com.thinkbigthings.springrecords.entity.User;
 import org.springframework.data.domain.Page;
@@ -20,6 +20,18 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String name);
+
+    // Records don't satisfy the JPA spec
+    // JPA entities will remain tied to classes because they represent mutable state transitions
+
+    // If you want immutable JPA entities:
+    // make no setter methods, have public constructor that takes all properties, annotate with Hibernate's @Immutable
+
+    // Records make great projections
+    // Already mapped to DTO
+    // Result is immutable
+    // No lifecycle or managed state so query can be faster
+    // Note that shallow queries are more efficient (can query into a tree as a user navigates)
 
     // this is a JPQL Constructor Expression
     // nested constructors are not allowed
@@ -60,7 +72,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return user.map(u -> new com.thinkbigthings.springrecords.dto.User()
                 .withUsername(u.username())
                 .withRegistrationTime(u.registrationTime().toString())
-                .withPersonalInfo(new UserEditableInfo(u.email(), u.display(), addresses)));
+                .withPersonalInfo(new UserInfo(u.email(), u.display(), addresses)));
     }
 
 
