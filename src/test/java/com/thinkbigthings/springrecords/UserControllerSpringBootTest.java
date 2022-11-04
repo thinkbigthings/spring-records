@@ -7,7 +7,6 @@ import com.thinkbigthings.springrecords.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import static com.thinkbigthings.springrecords.data.TestData.createRandomUserRegistration;
 import static com.thinkbigthings.springrecords.data.TestData.randomPersonalInfo;
@@ -33,9 +32,7 @@ class UserControllerSpringBootTest extends IntegrationTest {
 
         var userResponse = userController.updateUser(randomPersonalInfo(), newUser.username());
 
-        var updatedUser = userController.getUser(newUser.username());
-
-        assertEquals(userResponse, updatedUser);
+        assertEquals(userResponse.username(), newUser.username());
     }
 
     @Test

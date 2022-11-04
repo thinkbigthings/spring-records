@@ -74,19 +74,6 @@ public class UserService {
         return userRepo.loadSummaries(page);
     }
 
-    @Transactional(readOnly = true)
-    public com.thinkbigthings.springrecords.dto.User getUser(String username, boolean useRepo) {
-
-        // toUserRecord mapper is good for returning when an entity state transition was necessary
-        // but for read only can return dto directly
-
-        var user = useRepo
-                ? userRepo.findRecord(username)
-                : userDao.getUserDto(username);
-
-        return user.orElseThrow(() -> new EntityNotFoundException("no user found for " + username));
-    }
-
     public User fromRegistration(CreateUser registration) {
 
         var user = new User(registration.username(), registration.username());

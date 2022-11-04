@@ -30,8 +30,6 @@ public class UserController {
     public UserController(UserService service, ConfigurationRecord env) {
         userService = service;
         config = env;
-
-        LOG.info("Found configuration: " + config);
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +39,7 @@ public class UserController {
 
         return  userService.saveNewUser(newUser);
     }
+
 
     @RequestMapping(value="/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -52,11 +51,6 @@ public class UserController {
         return summaries;
     }
 
-    private Pageable withMaxSize(Pageable page) {
-        return page.getPageSize() > config.page().maxSize()
-            ? PageRequest.of(page.getPageSize(), config.page().maxSize(), page.getSort())
-            : page;
-    }
 
     @RequestMapping(value="/user/{username}/personalInfo", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -65,12 +59,10 @@ public class UserController {
         return userService.updateUser(username, userData);
     }
 
-    @RequestMapping(value="/user/{username}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public User getUser(@PathVariable String username) {
 
-        User foundUser = userService.getUser(username, config.data().useRepo());
-        return foundUser;
+    private Pageable withMaxSize(Pageable page) {
+        return page.getPageSize() > config.page().maxSize()
+                ? PageRequest.of(page.getPageSize(), config.page().maxSize(), page.getSort())
+                : page;
     }
-
 }

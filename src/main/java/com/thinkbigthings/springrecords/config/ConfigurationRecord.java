@@ -14,6 +14,10 @@ public record ConfigurationRecord(int number, Page page, @NotNull Data data) {
 
     public record Page(@Positive int maxSize) {   }
 
+//    app.number=99
+//    app.data.useRepo=true
+//    app.page.maxSize=12
+
 }
 
 
