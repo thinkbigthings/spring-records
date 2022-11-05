@@ -1,7 +1,6 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +20,7 @@ public class UserDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private record IntermediateUserRecord(Long id, String username, Instant registrationTime, String email, String display) {}
+    private record IntermediateUserRecord(Long id, String username, String email) {}
 
 
     // records work great with RowMapper
@@ -44,9 +41,7 @@ public class UserDao {
             Long id = rs.getLong(1);
             String name = rs.getString(2);
             String email = rs.getString(3);
-            String display = rs.getString(4);
-            Timestamp reg = rs.getTimestamp(5);
-            return new IntermediateUserRecord(id, name, reg.toInstant(), email, display);
+            return new IntermediateUserRecord(id, name, email);
         }
     };
 
@@ -59,8 +54,7 @@ public class UserDao {
             String addressSql = "SELECT * from address a WHERE a.user_id=?";
             List<UserAddress> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
 
-            return Optional.of(new User(user.username(), user.registrationTime().toString(),
-                    new UserInfo(user.email(), user.display(), new HashSet<>(addresses))));
+            return Optional.of(new User(user.username(), user.email(), new HashSet<>(addresses)));
         }
         catch(EmptyResultDataAccessException e) {
             return Optional.empty();

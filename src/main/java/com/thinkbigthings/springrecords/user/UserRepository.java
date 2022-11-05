@@ -2,7 +2,6 @@ package com.thinkbigthings.springrecords.user;
 
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.dto.UserSummary;
 import com.thinkbigthings.springrecords.entity.User;
 import org.springframework.data.domain.Page;
@@ -27,29 +26,28 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // If you want immutable JPA entities:
     // make no setter methods, have public constructor that takes all properties, annotate with Hibernate's @Immutable
 
-    // Records make great projections
-    // Already mapped to DTO
-    // Result is immutable
-    // No lifecycle or managed state so query can be faster
-    // Note that shallow queries are more efficient (can query into a tree as a user navigates)
+    // Records make great projections:
+    // - Already mapped to DTO
+    // - Result is immutable
+    // - No lifecycle or managed state so query can be faster
 
     // this is a JPQL Constructor Expression
     // nested constructors are not allowed
     // collections in constructor ars are not allowed
     @Query("SELECT new com.thinkbigthings.springrecords.dto.UserSummary" +
-            "(u.username, u.displayName) " +
+            "(u.username, u.email) " +
             "FROM User u " +
             "ORDER BY u.username ASC ")
     Page<UserSummary> loadSummaries(Pageable page);
 
 
 
-    record UserDbRow(Long id, String username, Instant registrationTime, String email, String display) {}
+    record UserDbRow(Long id, String username, String email) {}
 
     // Use $ instead of . as a class separator in qualified name for constructor query
     @SuppressWarnings("JpaQlInspection")
     @Query("SELECT new com.thinkbigthings.springrecords.user.UserRepository$UserDbRow" +
-            "(u.id, u.username, u.registrationTime, u.email, u.displayName)" +
+            "(u.id, u.username, u.email)" +
             "FROM User u WHERE u.username=:username")
     Optional<UserDbRow> loadUserData(String username);
 
@@ -68,12 +66,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 .map(HashSet::new)
                 .orElse(new HashSet<>());
 
-        // gets around nested constructor expressions, gets around collections in constructor expressions, and shows builder
-        return user.map(u -> new com.thinkbigthings.springrecords.dto.User()
-                .withUsername(u.username())
-                .withRegistrationTime(u.registrationTime().toString())
-                .withPersonalInfo(new UserInfo(u.email(), u.display(), addresses)));
+        return user.map(u -> new com.thinkbigthings.springrecords.dto.User(u.username(), u.email(), addresses));
     }
-
 
 }

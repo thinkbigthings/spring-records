@@ -4,7 +4,7 @@ package com.thinkbigthings.springrecords;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkbigthings.springrecords.config.ConfigurationRecord;
-import com.thinkbigthings.springrecords.dto.CreateUser;
+import com.thinkbigthings.springrecords.dto.User;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static java.util.Collections.emptySet;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerWebMvcTest {
 
 	private ObjectMapper mapper = new ObjectMapper();
-	private ObjectWriter jsonWriter = mapper.writerFor(CreateUser.class);
+	private ObjectWriter jsonWriter = mapper.writerFor(User.class);
 
 	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
@@ -53,10 +54,10 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationFailsSizeValidation() throws Exception {
 
-		var badRegistration = new CreateUser("1", "1", "x@123.com");
+		User badUser = new User("1", "x", emptySet());
 
-		var reqBuilder = post("/registration")
-				.content(jsonWriter.writeValueAsString(badRegistration))
+		var reqBuilder = post("/user")
+				.content(jsonWriter.writeValueAsString(badUser))
 				.contentType(MediaType.APPLICATION_JSON);
 
 		// this tests that the validation is applied
@@ -68,10 +69,10 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
 
-		CreateUser registration = new CreateUser("12345", "12345", "x@123.com");
+		User goodUser = new User("12345", "x@123.com", emptySet());
 
-		var reqBuilder = post("/registration")
-				.content(jsonWriter.writeValueAsString(registration))
+		var reqBuilder = post("/user")
+				.content(jsonWriter.writeValueAsString(goodUser))
 				.contentType(MediaType.APPLICATION_JSON);
 
 		mockMvc.perform(reqBuilder)

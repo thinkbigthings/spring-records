@@ -11,6 +11,7 @@ import javax.validation.ValidatorFactory;
 import java.time.Instant;
 import java.util.HashSet;
 
+import static java.util.Collections.emptySet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -64,19 +65,19 @@ public class BasicTest {
         addresses.add(TestData.randomAddressRecord());
 
         // records are shallowly immutable, you need to manage deep immutability yourself
-        UserInfo info = new UserInfo("myname", "me@springone.io", addresses);
+        User user = new User("me@springone.io", "myname", addresses);
 
-        assertThrows(UnsupportedOperationException.class, () -> info.addresses().clear());
+        assertThrows(UnsupportedOperationException.class, () -> user.addresses().clear());
     }
 
     @Test
     public void testAnnotations() {
 
         // annotations are applied on record components
-        var invalidRequest = new CreateUser("", "", "");
+        var invalidUser = new User("", "", emptySet());
 
         // these will be applied on
-        var violations = validator.validate(invalidRequest);
+        var violations = validator.validate(invalidUser);
 
         assertEquals(2, violations.size());
     }
@@ -85,14 +86,12 @@ public class BasicTest {
     public void testBuilder() {
 
         String now = Instant.now().toString();
-        UserInfo info = new UserInfo("egarak@ds9.gov", "Elim Garak", new HashSet<>());
 
         var user1 = new User()
                 .withUsername("egarak")
-                .withRegistrationTime(now)
-                .withPersonalInfo(info);
+                .withEmail(now);
 
-        var user2 = new User("egarak", now, info);
+        var user2 = new User("egarak", now, new HashSet<>());
 
         assertEquals(user1, user2);
     }

@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,16 +26,6 @@ public class User implements Serializable {
     @Size(min = 3, message = "must be at least three characters")
     private String email = "";
 
-    @NotNull
-    @Size(min = 3, message = "must be at least three characters")
-    @Column(name="display_name")
-    private String displayName = "";
-
-    @Basic
-    @NotNull
-    private Instant registrationTime;
-
-
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Address> addresses = new HashSet<>();
 
@@ -44,9 +33,9 @@ public class User implements Serializable {
         // no arg constructor is required by JPA
     }
 
-    public User(String name, String display) {
-        username = name;
-        displayName = display;
+    public User(String name, String email) {
+        this.username = name;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -63,22 +52,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public Instant getRegistrationTime() {
-        return registrationTime;
-    }
-
-    public void setRegistrationTime(Instant registration) {
-        this.registrationTime = registration;
     }
 
     public Set<Address> getAddresses() {

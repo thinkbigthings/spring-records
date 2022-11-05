@@ -8,8 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-import static com.thinkbigthings.springrecords.data.TestData.createRandomUserRegistration;
-import static com.thinkbigthings.springrecords.data.TestData.randomPersonalInfo;
+import static com.thinkbigthings.springrecords.data.TestData.randomUser;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -28,21 +27,20 @@ class UserControllerSpringBootTest extends IntegrationTest {
     public void testControllerArgsAndReturns() {
 
         // enter here!
-        var newUser = userController.createUser(createRandomUserRegistration());
+        var newUser = randomUser();
+        var createdUser = userController.createUser(newUser);
 
-        var userResponse = userController.updateUser(randomPersonalInfo(), newUser.username());
-
-        assertEquals(userResponse.username(), newUser.username());
+        assertEquals(newUser, createdUser);
     }
 
     @Test
     public void testUserSummary() {
 
         // create test users
-        userController.createUser(createRandomUserRegistration());
+        userController.createUser(randomUser());
 
         // come on in!
-        // data comes out of the database already mapped - no extra mapping step!
+        // data comes out of the database already mapped - no extra mapping step
         var users = userController.getUsers(PageRequest.of(0, 10));
 
         assertTrue(users.getTotalElements() >= 1);
@@ -51,11 +49,10 @@ class UserControllerSpringBootTest extends IntegrationTest {
     @Test
     public void testRepoVsDao() {
 
-        var user = userController.createUser(createRandomUserRegistration());
-        var updateUser = userController.updateUser(randomPersonalInfo(), user.username());
+        var createdUser = userController.createUser(randomUser());
 
-        var daoUser = userDao.getUserDto(user.username());
-        var repoUser = userRepository.findRecord(user.username());
+        var daoUser = userDao.getUserDto(createdUser.username());
+        var repoUser = userRepository.findRecord(createdUser.username());
 
         assertEquals(daoUser, repoUser);
     }

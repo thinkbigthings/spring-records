@@ -1,7 +1,6 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.UserInfo;
 import com.thinkbigthings.springrecords.entity.Address;
 import com.thinkbigthings.springrecords.entity.User;
 
@@ -10,25 +9,21 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toSet;
 
-public class UserMapper implements Function<User, com.thinkbigthings.springrecords.dto.User> {
+public class UserEntityToRecord implements Function<User, com.thinkbigthings.springrecords.dto.User> {
 
     @Override
     public com.thinkbigthings.springrecords.dto.User apply(User user) {
 
         return new com.thinkbigthings.springrecords.dto.User(user.getUsername(),
-                user.getRegistrationTime().toString(),
-                toPersonalInfoRecord(user));
+                user.getEmail(),
+                extractAddressRecords(user));
     }
 
-    public UserInfo toPersonalInfoRecord(User user) {
-
-        Set<UserAddress> addresses = user.getAddresses().stream()
+    public Set<UserAddress> extractAddressRecords(User user) {
+        return user.getAddresses().stream()
                 .map(this::toAddressRecord)
                 .collect(toSet());
 
-        return new UserInfo(user.getEmail(),
-                user.getDisplayName(),
-                addresses);
     }
 
     public UserAddress toAddressRecord(Address address) {
