@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// almost of the full stack is used, and your code will be called in exactly the same way
+// as if it were processing a real HTTP request but without the cost of starting the server
 // WebMvcTest (as opposed to pure unit test) is good for testing:
-// almost of the full stack is used, and your code will be called in exactly the same way as if
-// it were processing a real HTTP request but without the cost of starting the server
 //   HTTP request mapping
 //   Input field validation
 //   Serialization / Deserialization
@@ -42,8 +42,9 @@ public class UserControllerWebMvcTest {
 	private UserService userService;
 
 	// Records are always final, so a record cannot be a @MockBean or be mocked at all
-	// unless you use the Mockito extension that allows mocking final classes (org.mockito:mockito-inline)
-	// A record can implement an interface and THAT can be mocked
+	// Resolutions:
+	// - use the Mockito extension that allows mocking final classes (org.mockito:mockito-inline)
+	// - use a record that implements an interface and THAT can be mocked
 	@MockBean
 	ConfigurationRecord config;
 

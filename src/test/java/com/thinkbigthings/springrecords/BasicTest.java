@@ -34,19 +34,13 @@ public class BasicTest {
         var plainSimpleData = new UserSummary("egarak", "Elim Garak");
 
         // accessor methods use the component name
-        // looks odd if you're not used to it, but it is highly readable as method reference in a lambda
+        // it is highly readable as a method reference in a lambda
         assertEquals(justDataCarrier.username(), plainSimpleData.username());
 
         // by default records use data equality instead of reference equality
         assertEquals(justDataCarrier, plainSimpleData);
 
-        // toString has a sensible default (data, not reference)
-        // generated methods can always be overridden if you wish
-        assertEquals("UserSummary[username=egarak, displayName=Elim Garak]", plainSimpleData.toString());
-
-        // hashcodes are computed correctly for you
-        // if you add a field, you don't have to worry about updating hashcode
-        assertEquals(justDataCarrier.hashCode(), plainSimpleData.hashCode());
+        // toString and hashcode are generated for you too
     }
 
     @Test

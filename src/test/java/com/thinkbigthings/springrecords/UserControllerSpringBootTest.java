@@ -1,12 +1,17 @@
 package com.thinkbigthings.springrecords;
 
 import com.thinkbigthings.springrecords.config.IntegrationTest;
+import com.thinkbigthings.springrecords.dto.UserRecord;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserDao;
 import com.thinkbigthings.springrecords.user.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 
 import static com.thinkbigthings.springrecords.data.TestData.randomUser;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,36 +28,32 @@ class UserControllerSpringBootTest extends IntegrationTest {
     @Autowired
     private UserDao userDao;
 
-    @Test
-    public void testControllerArgsAndReturns() {
 
-        // enter here!
-        var newUser = randomUser();
-        var createdUser = userController.createUser(newUser);
+    private UserRecord newUser;
 
-        assertEquals(newUser, createdUser);
+
+    @BeforeEach
+    public void setup() {
+        newUser = randomUser();
+        userController.createUser(newUser);
     }
+
 
     @Test
     public void testUserSummary() {
 
-        // create test users
-        userController.createUser(randomUser());
-
-        // come on in!
         // data comes out of the database already mapped - no extra mapping step
         var users = userController.getUsers(PageRequest.of(0, 10));
 
         assertTrue(users.getTotalElements() >= 1);
     }
 
+
     @Test
     public void testRepoVsDao() {
 
-        var createdUser = userController.createUser(randomUser());
-
-        var daoUser = userDao.getUserDto(createdUser.username());
-        var repoUser = userRepository.findRecord(createdUser.username());
+        var daoUser = userDao.getUserDto(newUser.username());
+        var repoUser = userRepository.findRecord(newUser.username());
 
         assertEquals(daoUser, repoUser);
     }
