@@ -4,7 +4,7 @@ package com.thinkbigthings.springrecords;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.thinkbigthings.springrecords.config.ConfigurationRecord;
-import com.thinkbigthings.springrecords.dto.User;
+import com.thinkbigthings.springrecords.dto.UserRecord;
 import com.thinkbigthings.springrecords.user.UserController;
 import com.thinkbigthings.springrecords.user.UserService;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerWebMvcTest {
 
 	private ObjectMapper mapper = new ObjectMapper();
-	private ObjectWriter jsonWriter = mapper.writerFor(User.class);
+	private ObjectWriter jsonWriter = mapper.writerFor(UserRecord.class);
 
 	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
@@ -54,7 +54,7 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationFailsSizeValidation() throws Exception {
 
-		User badUser = new User("1", "x", emptySet());
+		UserRecord badUser = new UserRecord("1", "x", emptySet());
 
 		var reqBuilder = post("/user")
 				.content(jsonWriter.writeValueAsString(badUser))
@@ -69,7 +69,7 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
 
-		User goodUser = new User("12345", "x@123.com", emptySet());
+		UserRecord goodUser = new UserRecord("12345", "x@123.com", emptySet());
 
 		var reqBuilder = post("/user")
 				.content(jsonWriter.writeValueAsString(goodUser))

@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "app_user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
-public class User implements Serializable {
+public class UserEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -29,11 +29,11 @@ public class User implements Serializable {
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval=true)
     private Set<Address> addresses = new HashSet<>();
 
-    protected User() {
+    protected UserEntity() {
         // no arg constructor is required by JPA
     }
 
-    public User(String name, String email) {
+    public UserEntity(String name, String email) {
         this.username = name;
         this.email = email;
     }

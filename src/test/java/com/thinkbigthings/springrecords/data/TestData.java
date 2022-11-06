@@ -1,7 +1,7 @@
 package com.thinkbigthings.springrecords.data;
 
 
-import com.thinkbigthings.springrecords.dto.User;
+import com.thinkbigthings.springrecords.dto.UserRecord;
 import com.thinkbigthings.springrecords.dto.UserAddress;
 import net.datafaker.Address;
 import net.datafaker.Faker;
@@ -18,9 +18,9 @@ public class TestData {
     private static Faker faker = new Faker(Locale.US, random);
 
 
-    public static User randomUser() {
+    public static UserRecord randomUser() {
 
-        return new User(
+        return new UserRecord(
                 faker.name().name(),
                 faker.internet().emailAddress(),
                 Set.of(randomAddressRecord(), randomAddressRecord()));

@@ -1,7 +1,7 @@
 package com.thinkbigthings.springrecords.user;
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
-import com.thinkbigthings.springrecords.dto.User;
+import com.thinkbigthings.springrecords.dto.UserRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,7 +45,7 @@ public class UserDao {
         }
     };
 
-    public Optional<User> getUserDto(String username) {
+    public Optional<UserRecord> getUserDto(String username) {
 
         try {
             String userSql = "SELECT * FROM app_user u WHERE u.username=?";
@@ -54,7 +54,7 @@ public class UserDao {
             String addressSql = "SELECT * from address a WHERE a.user_id=?";
             List<UserAddress> addresses = jdbcTemplate.query(addressSql, addressRowMapper, user.id());
 
-            return Optional.of(new User(user.username(), user.email(), new HashSet<>(addresses)));
+            return Optional.of(new UserRecord(user.username(), user.email(), new HashSet<>(addresses)));
         }
         catch(EmptyResultDataAccessException e) {
             return Optional.empty();

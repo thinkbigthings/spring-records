@@ -27,7 +27,7 @@ public class Address {
     @NotNull
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     public Address() {
 
@@ -69,11 +69,11 @@ public class Address {
         this.zip = zip;
     }
 
-    public User getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 }

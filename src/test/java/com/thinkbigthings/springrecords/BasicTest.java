@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.time.Instant;
 import java.util.HashSet;
 
 import static java.util.Collections.emptySet;
@@ -25,6 +24,7 @@ public class BasicTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
+
 
     @Test
     public void testGeneratedMethods() {
@@ -50,6 +50,26 @@ public class BasicTest {
     }
 
     @Test
+    public void testInheritance() {
+        String recordParentClass = UserSummary.class.getSuperclass().getName();
+        assertEquals("java.lang.Record", recordParentClass);
+    }
+
+    @Test
+    public void testGenerics() {
+
+        // records can be declared inline
+        record Container<T>(T content) {}
+
+        // Here the generic type is inferred by the argument type.
+        var container1 = new Container<>(137);
+        var container2 = new Container<>("137");
+
+        // note the return types of content()
+        assertEquals(container1.content().toString(), container2.content());
+    }
+
+    @Test
     public void testCompactConstructor() {
 
         // compact constructor is for validation logic
@@ -65,7 +85,7 @@ public class BasicTest {
         addresses.add(TestData.randomAddressRecord());
 
         // records are shallowly immutable, you need to manage deep immutability yourself
-        User user = new User("me@springone.io", "myname", addresses);
+        UserRecord user = new UserRecord("me@springone.io", "myname", addresses);
 
         assertThrows(UnsupportedOperationException.class, () -> user.addresses().clear());
     }
@@ -74,26 +94,12 @@ public class BasicTest {
     public void testAnnotations() {
 
         // annotations are applied on record components
-        var invalidUser = new User("", "", emptySet());
+        var invalidUser = new UserRecord("", "", emptySet());
 
         // these will be applied on
         var violations = validator.validate(invalidUser);
 
         assertEquals(2, violations.size());
-    }
-
-    @Test
-    public void testBuilder() {
-
-        String now = Instant.now().toString();
-
-        var user1 = new User()
-                .withUsername("egarak")
-                .withEmail(now);
-
-        var user2 = new User("egarak", now, new HashSet<>());
-
-        assertEquals(user1, user2);
     }
 
 }

@@ -2,23 +2,23 @@ package com.thinkbigthings.springrecords.user;
 
 
 import com.thinkbigthings.springrecords.dto.UserAddress;
+import com.thinkbigthings.springrecords.dto.UserRecord;
 import com.thinkbigthings.springrecords.dto.UserSummary;
-import com.thinkbigthings.springrecords.entity.User;
+import com.thinkbigthings.springrecords.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<User> findByUsername(String name);
+    Optional<UserEntity> findByUsername(String name);
 
     // Records don't satisfy the JPA spec
     // JPA entities will remain tied to classes because they represent mutable state transitions
@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // collections in constructor ars are not allowed
     @Query("SELECT new com.thinkbigthings.springrecords.dto.UserSummary" +
             "(u.username, u.email) " +
-            "FROM User u " +
+            "FROM UserEntity u " +
             "ORDER BY u.username ASC ")
     Page<UserSummary> loadSummaries(Pageable page);
 
@@ -48,7 +48,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @SuppressWarnings("JpaQlInspection")
     @Query("SELECT new com.thinkbigthings.springrecords.user.UserRepository$UserDbRow" +
             "(u.id, u.username, u.email)" +
-            "FROM User u WHERE u.username=:username")
+            "FROM UserEntity u WHERE u.username=:username")
     Optional<UserDbRow> loadUserData(String username);
 
 
@@ -57,7 +57,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<UserAddress> loadUserAddresses(String username);
 
 
-    default Optional<com.thinkbigthings.springrecords.dto.User> findRecord(String username) {
+    default Optional<UserRecord> findRecord(String username) {
 
         var user = loadUserData(username);
 
@@ -66,7 +66,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                 .map(HashSet::new)
                 .orElse(new HashSet<>());
 
-        return user.map(u -> new com.thinkbigthings.springrecords.dto.User(u.username(), u.email(), addresses));
+        return user.map(u -> new UserRecord(u.username(), u.email(), addresses));
     }
 
 }

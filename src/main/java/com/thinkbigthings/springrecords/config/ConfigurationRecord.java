@@ -8,15 +8,14 @@ import javax.validation.constraints.Positive;
 
 @Validated
 @ConfigurationProperties(prefix = "app")
-public record ConfigurationRecord(int number, Page page, @NotNull Data data) {
-
-    public record Data(Boolean useRepo) {   }
+public record ConfigurationRecord(int number, @NotNull Page page) {
 
     public record Page(@Positive int maxSize) {   }
 
-//    app.number=99
-//    app.data.useRepo=true
-//    app.page.maxSize=12
+    // application.properties
+    //
+    //    app.number=99
+    //    app.page.maxSize=12
 
 }
 

@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 
@@ -38,16 +37,6 @@ public class IntegrationTest {
 
     @DynamicPropertySource
     static void useDynamicProperties(DynamicPropertyRegistry registry) {
-
-        // Since we exposed the pg port we can set static connection properties in application.properties directly.
-        // If we were not using withCreateContainerCmdModifier() we'd use @DynamicPropertySource
-        // to populate the DynamicPropertyRegistry, write the properties to build/postgres.properties,
-        // and could have in application.properties a reference to it like
-        // spring.config.import=optional:file:./build/postgres.properties
-
-
-        // need "autosave conservative" config, otherwise pg driver has caching issues with blue-green deployment
-        // (org.postgresql.util.PSQLException: ERROR: cached plan must not change result type)
 
         postgres = new PostgreSQLContainer<>(POSTGRES_IMAGE)
                 .withUrlParam("autosave", "conservative")
