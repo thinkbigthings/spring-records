@@ -10,9 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
-import javax.validation.Validation;
-import javax.validation.ValidatorFactory;
-
 import static com.thinkbigthings.springrecords.data.TestData.randomUser;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -15,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static java.util.Collections.emptySet;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,18 +43,15 @@ public class UserControllerWebMvcTest {
 	// Records are always final, so a record cannot be a @MockBean or be mocked at all
 	// Resolutions:
 	// - use the Mockito extension that allows mocking final classes (org.mockito:mockito-inline)
-	// - use a record that implements an interface and THAT can be mocked
+	// - use a record that implements an interface, and the interface can be mocked
 	@MockBean
 	ConfigurationRecord config;
 
 
-	// requires hibernate validator on classpath and @Valid on controller parameter
-	// (@Validated on class allows for validation of path variables)
-
 	@Test
 	public void testRegistrationFailsSizeValidation() throws Exception {
 
-		UserRecord badUser = new UserRecord("1", "x", emptySet());
+		UserRecord badUser = new UserRecord("1", "x");
 
 		var reqBuilder = post("/user")
 				.content(jsonWriter.writeValueAsString(badUser))
@@ -70,7 +66,7 @@ public class UserControllerWebMvcTest {
 	@Test
 	public void testRegistrationPassesValidation() throws Exception {
 
-		UserRecord goodUser = new UserRecord("12345", "x@123.com", emptySet());
+		UserRecord goodUser = new UserRecord("12345", "x@123.com");
 
 		var reqBuilder = post("/user")
 				.content(jsonWriter.writeValueAsString(goodUser))
@@ -80,4 +76,5 @@ public class UserControllerWebMvcTest {
 				.andDo(print())
 				.andExpect(status().isOk());
 	}
+
 }
