@@ -4,6 +4,7 @@ import com.thinkbigthings.springrecords.config.ConfigurationRecord;
 import com.thinkbigthings.springrecords.dto.UserAddress;
 import com.thinkbigthings.springrecords.dto.UserRecord;
 import com.thinkbigthings.springrecords.dto.UserSummary;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.SocketTimeoutException;
 
 @RestController

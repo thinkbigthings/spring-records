@@ -4,7 +4,7 @@ import com.thinkbigthings.springrecords.data.TestData;
 import com.thinkbigthings.springrecords.dto.*;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.Validation;
+import jakarta.validation.Validation;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

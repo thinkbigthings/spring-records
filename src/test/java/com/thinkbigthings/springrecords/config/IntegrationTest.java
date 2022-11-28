@@ -17,6 +17,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+        "spring.flyway.cleanDisabled=false",
         "logging.level.org.hibernate.SQL=DEBUG",
         "logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE",
         "spring.main.lazy-initialization=true",

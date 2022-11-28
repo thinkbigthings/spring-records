@@ -1,7 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.4'
-	id 'io.spring.dependency-management' version '1.0.13.RELEASE'
-	id 'org.flywaydb.flyway' version '8.5.1'
+	id 'org.springframework.boot' version '3.0.0'
+	id 'org.flywaydb.flyway' version '9.8.2'
 	id 'java'
 }
 
@@ -36,32 +35,32 @@ tasks.withType(JavaExec) {
 
 dependencies {
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.4'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.0'
 	runtimeOnly 'org.postgresql:postgresql:42.5.0'
 	testImplementation 'org.testcontainers:postgresql:1.17.3'
 
-	implementation 'org.springframework.boot:spring-boot-starter-validation:2.6.3'
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.0'
 
-	implementation 'org.flywaydb:flyway-core:8.5.1'
+	implementation 'org.flywaydb:flyway-core:9.8.2'
 
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.7.4'
+	implementation 'org.springframework.boot:spring-boot-starter-web:3.0.0'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.0.0'
 	testImplementation 'org.testcontainers:junit-jupiter:1.17.3'
 	testImplementation 'net.datafaker:datafaker:1.6.0'
 
 	// for mocking final classes (records)
 	testImplementation 'org.mockito:mockito-inline:4.8.0'
 
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:2.7.4"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:3.0.0"
 
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-	}
-}
+//dependencyManagement {
+//	imports {
+//		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+//	}
+//}
 
 tasks.named('test') {
 	useJUnitPlatform()
